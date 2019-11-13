@@ -1,7 +1,7 @@
 package com.zhouyou.http.demo.model;
 
 
-import com.zhouyou.http.demo.MyApplication;
+import com.zhouyou.http.demo.MApplication;
 import com.zhouyou.http.demo.utils.ACache;
 
 
@@ -11,8 +11,8 @@ public class LoginCache {
     private ACache mAcache = null;
 
     public LoginCache() {
-        if (MyApplication.getAppContext() != null) {
-            mAcache = ACache.get(MyApplication.getAppContext(), fileName);
+        if (MApplication.getAppContext() != null) {
+            mAcache = ACache.get(MApplication.getAppContext(), fileName);
         }
     }
 
@@ -31,8 +31,8 @@ public class LoginCache {
         if (mAcache != null) {
             mAcache.put(this.getClass().getSimpleName(), new LoginInfo(username, password));
         } else {
-            if (MyApplication.getAppContext() != null) {
-                mAcache = ACache.get(MyApplication.getAppContext(), fileName);
+            if (MApplication.getAppContext() != null) {
+                mAcache = ACache.get(MApplication.getAppContext(), fileName);
                 mAcache.put(this.getClass().getName(), new LoginInfo(username, password));
             }
         }

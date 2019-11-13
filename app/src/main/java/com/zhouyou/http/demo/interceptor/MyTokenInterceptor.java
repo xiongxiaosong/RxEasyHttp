@@ -6,14 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
-import com.zhouyou.http.demo.constant.AppConstant;
 import com.zhouyou.http.demo.constant.ComParamContact;
 import com.zhouyou.http.demo.model.AuthModel;
 import com.zhouyou.http.demo.model.LoginCache;
 import com.zhouyou.http.demo.model.LoginInfo;
 import com.zhouyou.http.demo.token.TokenManager;
 import com.zhouyou.http.demo.utils.DateTimeUtils;
-import com.zhouyou.http.demo.utils.MD5;
 import com.zhouyou.http.exception.ApiException;
 import com.zhouyou.http.interceptor.BaseExpiredInterceptor;
 import com.zhouyou.http.model.ApiResult;
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import okhttp3.FormBody;
@@ -37,7 +34,7 @@ import okhttp3.Response;
  * 日期： 2017/5/4 21:02 <br>
  * 版本： v1.0<br>
  */
-public class TokenInterceptor extends BaseExpiredInterceptor {
+public class MyTokenInterceptor extends BaseExpiredInterceptor {
     private ApiResult apiResult;
 
     @Override
@@ -76,10 +73,6 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
                     }
                     break;
                 case ComParamContact.Code.OTHER_PHONE_LOGINED://帐号在其它手机已登录
-                        /*authModel = reLogin();
-                        if (authModel != null) {
-                            return processAccessTokenError(chain, request);
-                        }*/
                     notifyLoginExit(apiResult.getMsg());
                     break;
                 case ComParamContact.Code.ERROR_SIGN://签名错误
@@ -274,17 +267,10 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
         return processError(chain, request, ComParamContact.Common.REFRESH_TOKEN, TokenManager.getInstance().getAuthModel().getRefreshToken());
     }
 
-    //签名规则：POST+url+参数的拼装+secret
+    //可以根据自己规则来签名
     private String sign(String path, TreeMap<String, String> dynamicMap) {
-        StringBuilder sb = new StringBuilder("POST");
-        sb.append(path);
-        for (Map.Entry<String, String> entry : dynamicMap.entrySet()) {
-            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-        }
-
-        sb.append(AppConstant.APP_SECRET);
-        HttpLog.i(sb.toString());
-        return MD5.encode(sb.toString());
+        //写签名逻辑...........
+        return "";
     }
 
     /**
